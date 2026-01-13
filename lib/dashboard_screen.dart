@@ -40,15 +40,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 }
 
-class Sidebar extends StatefulWidget {
-  const Sidebar({super.key, required int selectedIndex, required Null Function(dynamic i) onItemSelected});
+class Sidebar extends StatelessWidget {
+  final int selectedIndex;
+  final ValueChanged<int> onItemSelected;
 
-  @override
-  State<Sidebar> createState() => _SidebarState();
-}
-
-class _SidebarState extends State<Sidebar> {
-  int _selectedIndex = 0;
+  const Sidebar({
+    super.key,
+    required this.selectedIndex,
+    required this.onItemSelected,
+  });
 
   @override
   Widget build(BuildContext context) {
