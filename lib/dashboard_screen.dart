@@ -1,54 +1,25 @@
 import 'package:flutter/material.dart';
 
-class DashboardScreen extends StatefulWidget {
+class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
-
-  @override
-  State<DashboardScreen> createState() => _DashboardScreenState();
-}
-
-class _DashboardScreenState extends State<DashboardScreen> {
-  int _selectedIndex = 0;
-  static const List<String> _titles = [
-    'Dashboard',
-    'Crops',
-    'Weather',
-    'Analytics',
-  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Row(
-        children: [
-          Sidebar(
-            selectedIndex: _selectedIndex,
-            onItemSelected: (i) {
-              setState(() => _selectedIndex = i);
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text('Selected: ${_titles[i]}'),
-                  duration: const Duration(milliseconds: 600),
-                ),
-              );
-            },
-          ),
-          Expanded(child: DashboardContent(selectedIndex: _selectedIndex)),
-        ],
-      ),
+      body: Row(children: [Sidebar(), Expanded(child: DashboardContent())]),
     );
   }
 }
 
-class Sidebar extends StatelessWidget {
-  final int selectedIndex;
-  final ValueChanged<int> onItemSelected;
+class Sidebar extends StatefulWidget {
+  const Sidebar({super.key});
 
-  const Sidebar({
-    super.key,
-    required this.selectedIndex,
-    required this.onItemSelected,
-  });
+  @override
+  State<Sidebar> createState() => _SidebarState();
+}
+
+class _SidebarState extends State<Sidebar> {
+  int _selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -110,36 +81,6 @@ class Sidebar extends StatelessWidget {
             duration: const Duration(milliseconds: 600),
           ),
         );
-
-        // Quick navigation: push a simple page for non-dashboard items
-        if (index != 0) {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (_) {
-                return Scaffold(
-                  appBar: AppBar(title: Text(title)),
-                  body: Padding(
-                    padding: const EdgeInsets.all(24),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          title,
-                          style: const TextStyle(
-                            fontSize: 26,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const SizedBox(height: 12),
-                        Text('Content for $title will go here.'),
-                      ],
-                    ),
-                  ),
-                );
-              },
-            ),
-          );
-        }
       },
       borderRadius: BorderRadius.circular(10),
       child: Container(
@@ -168,26 +109,7 @@ class Sidebar extends StatelessWidget {
 }
 
 class DashboardContent extends StatelessWidget {
-  final int selectedIndex;
-  const DashboardContent({super.key, required this.selectedIndex});
-
-  @override
-  Widget build(BuildContext context) {
-    switch (selectedIndex) {
-      case 1:
-        return const CropsPage();
-      case 2:
-        return const WeatherPage();
-      case 3:
-        return const AnalyticsPage();
-      default:
-        return const DashboardMain();
-    }
-  }
-}
-
-class DashboardMain extends StatelessWidget {
-  const DashboardMain({super.key});
+  const DashboardContent({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -238,72 +160,6 @@ class DashboardMain extends StatelessWidget {
               Expanded(child: RightPanel()),
             ],
           ),
-        ],
-      ),
-    );
-  }
-}
-
-class CropsPage extends StatelessWidget {
-  const CropsPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(24),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: const [
-          Text(
-            'Crops',
-            style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
-          ),
-          SizedBox(height: 16),
-          Text('List of crops and management tools will appear here.'),
-        ],
-      ),
-    );
-  }
-}
-
-class WeatherPage extends StatelessWidget {
-  const WeatherPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(24),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: const [
-          Text(
-            'Weather',
-            style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
-          ),
-          SizedBox(height: 16),
-          Text('Weather data and forecasts go here.'),
-        ],
-      ),
-    );
-  }
-}
-
-class AnalyticsPage extends StatelessWidget {
-  const AnalyticsPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(24),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: const [
-          Text(
-            'Analytics',
-            style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
-          ),
-          SizedBox(height: 16),
-          Text('Charts and analytics will be shown here.'),
         ],
       ),
     );
